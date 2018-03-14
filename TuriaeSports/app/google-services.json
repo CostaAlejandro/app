@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1004702592512",
+    "firebase_url": "https://turia-esports.firebaseio.com",
+    "project_id": "turia-esports",
+    "storage_bucket": "turia-esports.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004702592512:android:f42cd3447b8c1d5d",
+        "android_client_info": {
+          "package_name": "com.example.alejandro.turiaesports"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004702592512-o92v3rt7cpv6lac7q5o5qfqn9dcl7pff.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHnzoWNmPp7TsQVPOEwlRwy_zNP7-83q0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
