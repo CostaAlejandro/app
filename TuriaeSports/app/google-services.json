@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1004702592512-v8anls9561le6fnoqpbkb94sr77ii87u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.alejandro.turiaesports",
+            "certificate_hash": "d2dc78129d910af309490dfb0accb9807d015a33"
+          }
+        },
+        {
           "client_id": "1004702592512-o92v3rt7cpv6lac7q5o5qfqn9dcl7pff.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004702592512-o92v3rt7cpv6lac7q5o5qfqn9dcl7pff.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
