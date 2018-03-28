@@ -7,7 +7,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,8 +14,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.alejandro.turiaesports.objetos.FirebaseReferences;
-import com.example.alejandro.turiaesports.objetos.User;
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,7 +26,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -43,7 +40,7 @@ public class Profile extends AppCompatActivity {
     EditText usuario, dorsal, posicion;
     Button guardar;
     ImageView imageView;
-    Uri uriProfileImage, newUriProfileImage;
+    Uri uriProfileImage;
     ProgressBar cargando;
     String profileImageUrl;
 
@@ -76,7 +73,6 @@ public class Profile extends AppCompatActivity {
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(Profile.this, "Tus muertos", Toast.LENGTH_SHORT).show();
                 saveUserInfo();
             }
 
@@ -89,6 +85,9 @@ public class Profile extends AppCompatActivity {
     private void loadUserData() {
         FirebaseUser user = mAuth.getCurrentUser();
         usuario.setText(user.getDisplayName());
+
+        Glide.with(this).load(user.getPhotoUrl().toString()).into(imageView);
+
 
         if(dorsal == null) {
             dorsal.setText(" ");
@@ -164,15 +163,34 @@ public class Profile extends AppCompatActivity {
 
         final FirebaseUser user = mAuth.getCurrentUser();
 
-        if (user!= null && profileImageUrl != null && displayDorsal !=null && displayPosicion !=null) {
-            UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder().setDisplayName(displayName).setPhotoUri(Uri.parse(profileImageUrl)).build();
+        if (user!= null && displayDorsal !=null && displayPosicion !=null) {
+            UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder().setDisplayName(displayName).build();
 
             user.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                     //   writeNewUser(user.getDisplayName(), displayDorsal, displayPosicion);
+                        Intent i = new Intent(Profile.this, Seleccion.class);
+                        writeNewUser(user.getDisplayName(), displayDorsal, displayPosicion);
                         Toast.makeText(Profile.this, "Perfil actualizado", Toast.LENGTH_SHORT).show();
+                        startActivity(i);
+                        finish();
+                    }
+                }
+            });
+        }
+
+        if (profileImageUrl != null) {
+            UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder().setPhotoUri(Uri.parse(profileImageUrl)).build();
+
+            user.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Intent i = new Intent(Profile.this, Seleccion.class);
+                        writeNewUser(user.getDisplayName(), displayDorsal, displayPosicion);
+                        Toast.makeText(Profile.this, "Perfil actualizado", Toast.LENGTH_SHORT).show();
+                        startActivity(i);
                         finish();
                     }
                 }
@@ -181,14 +199,14 @@ public class Profile extends AppCompatActivity {
     }
 
 
-    /* private void writeNewUser(String userId, String Dorsal, String Posicion) {
+     private void writeNewUser(String userId, String Dorsal, String Posicion) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference(FirebaseReferences.USERS_REFERENCE);
 
         myRef.child(userId).child("Dorsal").setValue(Dorsal);
         myRef.child(userId).child("Posicion").setValue(Posicion);
     }
-    */
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -206,6 +224,7 @@ public class Profile extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+
     }
 
     private void uploadImageToFirebaseStorage() {
