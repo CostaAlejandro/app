@@ -32,8 +32,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Seleccion"
-            android:theme="@android:style/Theme.Holo.Light"/>
+        <activity
+            android:name=".Seleccion"
+            android:theme="@android:style/Theme.Holo.Light" />
         <activity android:name=".Profile" />
 
         <meta-data
@@ -41,7 +42,8 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity android:name=".Calendario" />
-        <activity android:name=".Noticias"></activity>
+        <activity android:name=".Noticias" />
+        <activity android:name=".ViewPlayers"></activity>
     </application>
 
 </manifest>
