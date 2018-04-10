@@ -42,7 +42,6 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity android:name=".Calendario" />
-        <activity android:name=".Noticias" />
         <activity android:name=".ViewPlayers"></activity>
     </application>
 

@@ -5,13 +5,22 @@ package com.example.alejandro.turiaesports;
  */
 
 public class Partido1Datos {
-    private String Nombre1;
+    private String Nombre;
+    private String Estado;
 
-    public String getNombre1() {
-        return Nombre1;
+    public String getEstado() {
+        return Estado;
     }
 
-    public void setNombre1(String nombre1) {
-        Nombre1 = nombre1;
+    public void setEstado(String estado) {
+        Estado = estado;
+    }
+
+    public String getNombre() {
+        return Nombre;
+    }
+
+    public void setNombre1(String nombre) {
+        Nombre = nombre;
     }
 }

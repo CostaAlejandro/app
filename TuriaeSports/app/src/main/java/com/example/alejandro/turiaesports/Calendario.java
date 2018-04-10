@@ -33,11 +33,9 @@ import java.util.Locale;
 
 public class Calendario extends AppCompatActivity {
 
-    TextView tDia, partido1, partido2, partido3;
+    TextView tDia, tPartido;
     RadioButton rSi, rNo, rDuda;
     Button bSave, bView;
-    EditText eHour;
-    Switch confirm1, confirm2, confirm3;
     RadioGroup rGroup;
 
     FirebaseAuth auth;
@@ -52,7 +50,6 @@ public class Calendario extends AppCompatActivity {
         setContentView(R.layout.activity_calendario);
 
         auth = FirebaseAuth.getInstance();
-
 
         tDia = findViewById(R.id.tDia);
         Date d=new Date();
@@ -88,7 +85,6 @@ public class Calendario extends AppCompatActivity {
             }
         });
 
-        eHour = findViewById(R.id.eHora);
 
         bSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,26 +92,13 @@ public class Calendario extends AppCompatActivity {
                 saveP();
             }
         });
-
-        confirm1 = findViewById(R.id.confirm1);
-        confirm2 = findViewById(R.id.confirm2);
-        confirm3 = findViewById(R.id.confirm3);
-
-        partido1 = findViewById(R.id.partido1);
-        partido2 = findViewById(R.id.partido2);
-        partido3 = findViewById(R.id.partido3);
+        tPartido = findViewById(R.id.tPartido);
 
         loadGames();
 
     }
 
     private void loadGames() {
-        final FirebaseUser user = auth.getCurrentUser();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference myRef = database.getReference(FirebaseReferences.CALENDAR_REFERENCE);
-
-        String Hora = eHour.getText().toString();
-
         Date d=new Date();
         Calendar now = Calendar.getInstance();
         Time today=new Time(Time.getCurrentTimezone());
@@ -133,71 +116,14 @@ public class Calendario extends AppCompatActivity {
                         .child("calendario")
                         .child(mesString)
                         .child(day)
-                        .child("Partido1")
+                        .child("Partido")
                         .child("Rival");
 
         dbPartido1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String newPartido1 = (String) dataSnapshot.getValue();
-                partido1.setText(newPartido1);
-
-                if (newPartido1 != null) {
-                    confirm1.setVisibility(View.VISIBLE);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        DatabaseReference dbPartido2 =
-                FirebaseDatabase.getInstance().getReference()
-                        .child("calendario")
-                        .child(mesString)
-                        .child(day)
-                        .child("Partido2")
-                        .child("Rival");
-
-
-        dbPartido2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String newPartido2 = (String) dataSnapshot.getValue();
-                partido2.setText(newPartido2);
-
-                if (newPartido2 != null) {
-                    confirm2.setVisibility(View.VISIBLE);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        DatabaseReference dbPartido3 =
-                FirebaseDatabase.getInstance().getReference()
-                        .child("calendario")
-                        .child(mesString)
-                        .child(day)
-                        .child("Partido3")
-                        .child("Rival");
-
-        dbPartido3.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String newPartido3 = (String) dataSnapshot.getValue();
-                partido3.setText(newPartido3);
-
-                if (newPartido3 != null) {
-                    confirm3.setVisibility(View.VISIBLE);
-                }
+                tPartido.setText(newPartido1);
 
             }
 
@@ -215,8 +141,6 @@ public class Calendario extends AppCompatActivity {
          FirebaseDatabase database = FirebaseDatabase.getInstance();
          final DatabaseReference myRef = database.getReference(FirebaseReferences.CALENDAR_REFERENCE);
 
-
-         String Hora = eHour.getText().toString();
          String respuesta = "";
 
          Date d=new Date();
@@ -234,7 +158,7 @@ public class Calendario extends AppCompatActivity {
          int btn = rGroup.getCheckedRadioButtonId();
          switch (btn) {
              case RSI_ID:
-                 respuesta = "Juega";
+                 respuesta = "Si";
                  break;
              case RNO_ID:
                  respuesta = "No";
@@ -246,30 +170,11 @@ public class Calendario extends AppCompatActivity {
                  respuesta = "Duda";
          }
 
-         if (confirm1.isChecked() && user != null) {
-             myRef.child(mesString).child(day).child("Partido1").child("Plantilla").child(user.getDisplayName()).child("Nombre1").setValue(user.getDisplayName());
-         }
 
-         if (confirm2.isChecked() && user != null) {
-             myRef.child(mesString).child(day).child("Partido2").child("Plantilla").child(user.getDisplayName()).child("Nombre2").setValue(user.getDisplayName());
-         }
+         if (user != null) {
+             myRef.child(mesString).child(day).child("Partido").child("Plantilla").child(user.getDisplayName()).child("Nombre").setValue(user.getDisplayName());
+             myRef.child(mesString).child(day).child("Partido").child("Plantilla").child(user.getDisplayName()).child("Estado").setValue(respuesta);
 
-         if (confirm3.isChecked() && user != null) {
-             myRef.child(mesString).child(day).child("Partido3").child("Plantilla").child(user.getDisplayName()).child("Nombre3").setValue(user.getDisplayName());
-         }
-
-
-         if (user!= null) {
-             myRef.child(mesString).child(day).child("Plantilla").child(user.getDisplayName()).child("NombreG").setValue(user.getDisplayName());
-             myRef.child(mesString).child(day).child("Plantilla").child(user.getDisplayName()).child("HoraG").setValue(Hora);
-             myRef.child(mesString).child(day).child("Plantilla").child(user.getDisplayName()).child("Estado").setValue(respuesta);
-
-         }
-
-         if (user!= null && rNo.isChecked()) {
-             myRef.child(mesString).child(day).child("Plantilla").child(user.getDisplayName()).child("NombreG").setValue(user.getDisplayName());
-             myRef.child(mesString).child(day).child("Plantilla").child(user.getDisplayName()).child("HoraG").setValue(" ");
-             myRef.child(mesString).child(day).child("Plantilla").child(user.getDisplayName()).child("Estado").setValue(respuesta);
          }
 
     }

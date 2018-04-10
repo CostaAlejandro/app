@@ -30,7 +30,7 @@ import com.google.firebase.storage.StorageReference;
 public class Seleccion extends Activity {
 
     private FirebaseAuth auth;
-    TextView usuario, editar, cerrar, email, dorsal, posicion;
+    TextView usuario, editar, cerrar, email, dorsal, posicion, turia;
     ImageView perfil, marca;
     ProgressBar progressBar2;
     @Override
@@ -47,6 +47,7 @@ public class Seleccion extends Activity {
         perfil = findViewById(R.id.perfil);
         editar = findViewById(R.id.tEditar);
         marca = findViewById(R.id.marcaB);
+        turia = findViewById(R.id.turia);
 
         //Va a la ventana de iniciar sesión
         editar.setOnClickListener(new View.OnClickListener() {
@@ -90,10 +91,6 @@ public class Seleccion extends Activity {
                 Intent iCalendario = new Intent(Seleccion.this, Calendario.class);
                 startActivity(iCalendario);
                 return true;
-            case R.id.Mnoticias:
-                Intent iNoticias = new Intent(Seleccion.this, Noticias.class);
-                startActivity(iNoticias);
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -123,10 +120,6 @@ public class Seleccion extends Activity {
 
     private void loadUserInformation() {
         FirebaseUser user = auth.getCurrentUser();
-
-        if (user.getDisplayName() == null) {
-            UserProfileChangeRequest profile = new UserProfileChangeRequest.Builder().setDisplayName(" ").build();
-        }
 
         DatabaseReference dbDorsal =
                 FirebaseDatabase.getInstance().getReference()
@@ -169,7 +162,9 @@ public class Seleccion extends Activity {
 
         if (user != null) {
 
-            Glide.with(this).load(user.getPhotoUrl().toString()).into(perfil);
+            if(user.getPhotoUrl() != null) {
+                Glide.with(Seleccion.this).load(user.getPhotoUrl().toString()).into(perfil);
+            }
 
             if(user.getDisplayName() !=null) {
                 usuario.setText(user.getDisplayName());

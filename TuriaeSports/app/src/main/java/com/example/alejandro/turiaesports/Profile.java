@@ -86,11 +86,12 @@ public class Profile extends AppCompatActivity {
         FirebaseUser user = mAuth.getCurrentUser();
         usuario.setText(user.getDisplayName());
 
-        Glide.with(this).load(user.getPhotoUrl().toString()).into(imageView);
-
+        if (user.getPhotoUrl() != null ) {
+            Glide.with(this).load(user.getPhotoUrl().toString()).into(imageView);
+        }
 
         if(dorsal == null) {
-            dorsal.setText(" ");
+            dorsal.setText("");
         }
 
         DatabaseReference dbDorsal =
@@ -141,6 +142,7 @@ public class Profile extends AppCompatActivity {
         String displayName = usuario.getText().toString();
         final String displayDorsal = dorsal.getText().toString();
         final String displayPosicion = posicion.getText().toString();
+
 
         if (displayName.isEmpty()) {
             usuario.setError("El nombre de usuario es requerido");
